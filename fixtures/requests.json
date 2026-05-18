@@ -1,0 +1,35 @@
+{
+  "institution": {
+    "id": "inst-northstar",
+    "wallet": "0x1111111111111111111111111111111111111111",
+    "policy": {
+      "max_single_token_out_usd": 750000,
+      "allow_unlimited_approvals": false,
+      "required_quorum": 2
+    }
+  },
+  "tokens": [
+    {"symbol": "USDC", "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48", "decimals": 6, "usd": 1.0},
+    {"symbol": "WETH", "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", "decimals": 18, "usd": 3100.0},
+    {"symbol": "WBTC", "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599", "decimals": 8, "usd": 68000.0}
+  ],
+  "balances": [
+    {"symbol": "USDC", "amount": 2500000.0},
+    {"symbol": "WETH", "amount": 450.0},
+    {"symbol": "WBTC", "amount": 32.0}
+  ],
+  "counterparties": [
+    {"address": "0xrouter000000000000000000000000000000000001", "label": "Universal Router", "verified": true},
+    {"address": "0xpermit200000000000000000000000000000000002", "label": "Permit2", "verified": true},
+    {"address": "0xsafe00000000000000000000000000000000000003", "label": "Institution Safe", "verified": true},
+    {"address": "0xdrain000000000000000000000000000000000004", "label": "Unverified spender", "verified": false}
+  ],
+  "requests": [
+    {"id": "req-erc20-approve", "kind": "calldata", "method": "erc20.approve", "target": "0xrouter000000000000000000000000000000000001", "params": {"token": "USDC", "spender": "0xrouter000000000000000000000000000000000001", "amount": 350000.0}},
+    {"id": "req-permit2-router", "kind": "typed_data", "method": "permit2.permit", "target": "0xpermit200000000000000000000000000000000002", "params": {"token": "WETH", "spender": "0xrouter000000000000000000000000000000000001", "amount": 120.0, "expiry_minutes": 45}},
+    {"id": "req-router-swap", "kind": "calldata", "method": "universal_router.swap_exact_in", "target": "0xrouter000000000000000000000000000000000001", "params": {"token_in": "USDC", "amount_in": 500000.0, "token_out": "WETH", "min_amount_out": 155.0}},
+    {"id": "req-safe-role", "kind": "calldata", "method": "safe.exec_transaction", "target": "0xsafe00000000000000000000000000000000000003", "params": {"role": "treasury_operator", "grantee": "0x2222222222222222222222222222222222222222", "quorum": 2}},
+    {"id": "req-unlimited-drain", "kind": "typed_data", "method": "permit2.permit", "target": "0xpermit200000000000000000000000000000000002", "params": {"token": "WBTC", "spender": "0xdrain000000000000000000000000000000000004", "amount": 999999999.0, "expiry_minutes": 525600}}
+  ]
+}
+
